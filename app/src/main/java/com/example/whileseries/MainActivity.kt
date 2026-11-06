@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlin.math.abs
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +32,30 @@ class MainActivity : ComponentActivity() {
 fun CyclesScreen(modifier: Modifier = Modifier) {
 
 }
+
+data class CalculationResult(val sum: Double, val lastTerm: Double, val count: Int)
+
+fun calculateSeries(x: Double, epsilon: Double): CalculationResult {
+    var sum = 0.0
+    var term = 1.0 / x
+    var count = 0
+    var lastAddedTerm = 0.0
+    var den = 1.0
+
+
+    while (abs(term) >= epsilon) {
+        lastAddedTerm = term
+        sum += term
+        count++
+
+
+        term = -term * den / (den + 2.0) / (x * x)
+        den += 2.0
+    }
+
+    return CalculationResult(sum, lastAddedTerm, count)
+}
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
