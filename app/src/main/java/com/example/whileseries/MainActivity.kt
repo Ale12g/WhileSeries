@@ -30,7 +30,12 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun CyclesScreen(modifier: Modifier = Modifier) {
+    var inputX by remember { mutableStateOf("2.0") }
+    var inputEpsilon by remember { mutableStateOf("0.0001") }
 
+    var resultSum by remember { mutableStateOf("") }
+    var resultLastTerm by remember { mutableStateOf("") }
+    var resultCount by remember { mutableStateOf("") }
 }
 
 data class CalculationResult(val sum: Double, val lastTerm: Double, val count: Int)
