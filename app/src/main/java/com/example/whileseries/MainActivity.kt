@@ -36,6 +36,67 @@ fun CyclesScreen(modifier: Modifier = Modifier) {
     var resultSum by remember { mutableStateOf("") }
     var resultLastTerm by remember { mutableStateOf("") }
     var resultCount by remember { mutableStateOf("") }
+
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text("Вычисление ряда", fontSize = 24.sp, style = MaterialTheme.typography.headlineMedium)
+        Spacer(modifier = Modifier.height(24.dp))
+
+        TextField(
+            value = inputX,
+            onValueChange = { inputX = it },
+            label = { Text("Введите число x (не равно 0)") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+
+        TextField(
+            value = inputEpsilon,
+            onValueChange = { inputEpsilon = it },
+            label = { Text("Введите эпсилон (например, 0.0001)") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = {
+                val x = inputX.toDoubleOrNull()
+                val epsilon = inputEpsilon.toDoubleOrNull()
+
+                if (x == null || epsilon == null || epsilon <= 0) {
+                    resultSum = "Ошибка: введите корректные числа"
+                    resultLastTerm = ""
+                    resultCount = ""
+                } else if (x == 0.0) {
+                    resultSum = "Ошибка: x не может быть равен 0"
+                    resultLastTerm = ""
+                    resultCount = ""
+                } else {
+                    val result = calculateSeries(x, epsilon)
+                    resultSum = "Сумма: %.6f".format(result.sum)
+                    resultLastTerm = "Последнее слагаемое: %.6f".format(result.lastTerm)
+                    resultCount = "Повторений цикла: ${result.count}"
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Вычислить")
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text(text = resultSum, fontSize = 18.sp, color = MaterialTheme.colorScheme.primary)
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(text = resultLastTerm, fontSize = 18.sp, color = MaterialTheme.colorScheme.primary)
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(text = resultCount, fontSize = 18.sp, color = MaterialTheme.colorScheme.primary)
+    }
 }
 
 data class CalculationResult(val sum: Double, val lastTerm: Double, val count: Int)
